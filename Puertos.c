@@ -1,60 +1,21 @@
 #include "puertos.h"
 regconjunto_u registro;
+**************************Funciones Privadas***************************************************
 int Toggle (int bit);				//como es una funcion privada, no se ubica el protipo en el header
-/*int main (void)
-{ 
-	int mascara=0xFF;
-	int caso=1;
-	int resul;
-	registro.portD.word=0x0000;
-	printf("case%d word-> %X \n", caso, registro.portD.word); //ABCD
-	printf("case%d lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%d hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%d b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
-	char c ='A';
-	
-	BitSet(c,15);
-	printf("case set word-> %X \n",  registro.portD.word); //ABCD
-	printf("case%d lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%d hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%d b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
-	BitClr(c,15);
-	printf("case clr word-> %X \n",  registro.portD.word); //ABCD
-	printf("case%d lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%d hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%d b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
-	resul=BitGet(c,15);
-	printf("%d\n",resul);
-	BitToggle(c,14);
-	printf("case toggle word-> %X \n",  registro.portD.word); //ABCD
-	printf("case%d lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%d hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%d b15 -> %X \n", caso, registro.bits.b15);  //0
-	MaskOn(c,mascara);
-	printf("case maskok word-> %X \n", registro.portD.word); //ABCD
-	printf("case%c lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%c hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%c b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
-	MaskOff(c,mascara);
-	printf("case maskoff word-> %X \n", registro.portD.word); //ABCD
-	printf("case%c lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%c hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%c b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
-	MaskToggle(c,mascara);
-	printf("case masktoggle word-> %X \n", registro.portD.word); //ABCD
-	printf("case%c lo -> %X \n", caso, registro.portB.low);  //CD
-	printf("case%c hi -> %X \n", caso, registro.portA.high);  //AB
-	printf("case%c b15 -> %X \n", caso, registro.bits.b15);  //0
-	printf("\n");
 
-	return 0;
-	
-}*/
+int Toggle(int bit)							//funcion privada , ya que es complementaria a BitToggle
+{
+	if (bit==1)							//recibo un bit y devuelvo el opuesto
+	{
+		return 0;
+	}	
+	else
+	{
+		return 1;
+	}
+}
+*************************************************************************************************
+********************************Funciones Publicas*********************************************
 void BitSet(char puerto, int bit)
 {
     if ((puerto=='B') || (puerto=='b'))         //pregunta ṕor el puerto en el q se desea hacer la modificacion 
@@ -149,40 +110,40 @@ int BitGet(char puerto,int bit)
         }
     }
 }
-void BitToggle(char puerto,int bit)
+void BitToggle (char puerto, int bit)
 {
-    int c=BitGet(puerto,bit);
-	 c=Toggle(c);
-
-    if((puerto=='B')==(puerto=='b'))
-    {
-         switch(bit)                            
-        {
-            case 0: registro.bits.b0=c;break;
-            case 1: registro.bits.b1=c;break;
-            case 2: registro.bits.b2=c;break;
-            case 3: registro.bits.b3=c;break;
-            case 4: registro.bits.b4=c;break;
-            case 5: registro.bits.b5=c;break;
-            case 6: registro.bits.b6=c;break;
-            case 7: registro.bits.b7=c;break;         
-        }
-    }
-    else
-    {
-        switch(bit)                            
-        {
-            case 8: registro.bits.b8=c;break;
-            case 9: registro.bits.b9=c;break;
-            case 10: registro.bits.b10=c;break;
-            case 11: registro.bits.b11=c;break;
-            case 12: registro.bits.b12=c;break;
-            case 13: registro.bits.b13=c;break;
-            case 14: registro.bits.b14=c;break;
-            case 15: registro.bits.b15=c;break;
-        } 
-    }
+	int c=BitGet(puerto,bit);								//obtengo el estado original del bit seleccionado
+	c=Toggle(c);										//obtengo el opuesto del estado mediante la funcion Toggle y la guardo en la var c
+	if((puerto=='B') || (puerto=='b'))						//pregunto que puerto me pasaron 
+	{												//dependiendo del puerto que me pasaron y el bit , le asigno al bit seleccionado su nuevo estado
+		switch(bit)
+		{
+			case 0: registro.bits.b0=c; break;
+			case 1: registro.bits.b1=c; break;
+			case 2: registro.bits.b2=c; break;
+			case 3: registro.bits.b3=c; break;
+			case 4: registro.bits.b4=c; break;
+			case 5: registro.bits.b5=c; break;
+			case 6: registro.bits.b6=c; break;
+			case 7: registro.bits.b7=c; break;
+		}	
+	}
+	else
+	{
+		switch(bit)
+		{
+			case 8: registro.bits.b8=c; break;
+			case 9: registro.bits.b9=c; break;
+			case 10: registro.bits.b10=c; break;
+			case 11: registro.bits.b11=c; break;
+			case 12: registro.bits.b12=c; break;
+			case 13: registro.bits.b13=c; break;
+			case 14: registro.bits.b14=c; break;
+			case 15: registro.bits.b15=c; break;	
+		}
+	}
 }
+
 void MaskOn(char puerto,int mascara)
 {
     int resultado;
@@ -228,14 +189,4 @@ void MaskToggle(char puerto,int mascara)
         registro.portB.low=resultado;
     }
 }
-int Toggle(int bit)							//funcion privada , ya que es complementaria a BitToggle
-{
-	if (bit==1)							//recibo un bit y devuelvo el opuesto
-	{
-		return 0;
-	}	
-	else
-	{
-		return 1;
-	}
-}
+*************************************************************************************
