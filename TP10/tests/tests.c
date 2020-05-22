@@ -173,6 +173,8 @@ void testBitToggle() {
 }
 
 void testMaskOn() {
+    testfail = 0;
+    testpass = 0;
     char puertoD, puertoA,puertoB;
     registro.portD.Word==0xAAAA;				//1010 1010 1010 1010
     int mascara=0x5555;						//0101 0101 0101 0101
@@ -189,9 +191,10 @@ void testMaskOn() {
 	testfail++;
 	testfailglo++;
     }
-    int mascara=0x55;
+    registro.portD.Word==0xAAAA;
+    mascara=0x55;							//0101 0101 0000 0000
     MaskOn(puertoA,mascara);
-    if((registro.portA.high)==(0xFF))
+    if((registro.portA.high==0xFF) && (registro.portD.word==0xFFAA))
     {
 	testpass++;
 	testpassglo++;
@@ -201,9 +204,9 @@ void testMaskOn() {
 	testfail++;
 	testfailglo++;	
     }
-    int mascara=0x55;
+    registro.portD.Word==0xAAAA;
     MaskOn(puertoB,mascara);
-    if((registro.portB.low)=(0xFF))
+    if((registro.portB.low=0xFF) && (registro.portD.word==0xAAFF))
     {
 	testpass++;
 	testpastglo++;
@@ -221,21 +224,100 @@ void testMaskOn() {
 }
 
 void testMaskOff() {
-    char puerto;
-    int mascara;
-    MaskOff(puerto, mascara);
-    if (1 /*check result*/) {
-        printf("%%TEST_FAILED%% time=0 testname=testMaskOff (tests) message=error message sample\n");
+    testfail = 0;
+    testpass = 0;
+    char puertoA='A', puertoB ='B',puertoD='D';
+    registro.portD.word=0xAAAA;								//1010 1010 1010 1010
+    int mascara=0xAAAA;										//1010 1010 1010 1010
+    MaskOff(puertoD,mascara);
+    if(registro.portD.word==0x0000)
+    {
+	testpast++;
+	testpastglo++;
     }
+    else 
+    {
+	testfail++;
+	testfailglo++;
+    }
+    registro.portD.word=0xAAAA;
+    mascara=0xAA;									//1010 1010 0000 0000
+    MaskOff(puertoA,mascara);
+    if((registro.portA.high==0x00) && (registro.portD.word==0x00AA))
+    {
+	testpast++;
+	testpastglo++;
+    }
+    else
+    {
+	testfail++;
+	testfailglo++;
+    }
+    registro.portD.word=0xAAAA;
+    MaskOff(puertoB,mascara);                                               	 //la  mascara que se le pasa es 0000 0000 1010 1010
+    if((registro.portB.low==0x00) && (registro.portD.word==0xAA00))
+    {
+	testpast++;
+	testpastglo++;
+    }
+    else
+    {
+	testfail++;
+	testfailglo++;
+    }
+    if(testfail != 0)
+    {
+        printf("%%TEST_FAILED%% time=0 testname=testBitClr (tests) message=error message sample\n");
+    }
+    printf("TEST PASS BITCLR = %d TEST FAIL BITCLR = %d", testpass,testfail);
 }
 
 void testMaskToggle() {
-    char puerto;
-    int mascara;
-    MaskToggle(puerto, mascara);
-    if (1 /*check result*/) {
-        printf("%%TEST_FAILED%% time=0 testname=testMaskToggle (tests) message=error message sample\n");
+    testfail = 0;
+    testpass = 0;
+    char puertoA='A',puertoB='B', puertoD='D';
+    registro.portD.word=0xAAAA;
+    int mascara=0x5555;
+    MaskToggle(puertoD, mascara);
+    if(registro.portD.word==0xFFFF)
+    {
+	testpast++;
+	testpastglo++;
     }
+    else
+    {
+	testfail++;
+	testfailglo++;	
+    }
+    registro.portD.word=0xAAAA;
+    MaskToggle(puertoA,mascara);
+    if((registro.portA.high==0xFF) && (registro.portD.word==0xFFAA))
+    {
+	testpast++;
+	testpastglo++;
+    }
+    else
+    {
+	testfail++;
+	testfailglo++;
+    } 
+    registro.portD.word=0xAAAA;
+    MaskToggle(puertoB,mascara);
+    if((registro.portB.low==0xFF) && (registro.portD.word==0xAAFF))
+    {
+	testpast++;
+	testpastglo++;
+    }
+    else
+    {
+	testfail++;
+	testfailglo++;
+    } 
+    if(testfail != 0)
+    {
+        printf("%%TEST_FAILED%% time=0 testname=testBitClr (tests) message=error message sample\n");
+    }
+    printf("TEST PASS BITCLR = %d TEST FAIL BITCLR = %d", testpass,testfail);
 }
 
 int main(int argc, char** argv) {
