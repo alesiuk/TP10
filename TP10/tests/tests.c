@@ -96,6 +96,7 @@ void testBitClr(char puerto, int bit)
             if (bit == 0 && registro.bits.b0 == 0)
             {
                 testpass++;
+                testpassglo++;
             }
             if(bit == 15 && registro.bits.b15 == 0)
             {
@@ -141,13 +142,25 @@ void testBitClr(char puerto, int bit)
     printf("TEST PASS BITCLR = %d TEST FAIL BITCLR = %d", testpass,testfail);
 }
 
-void testBitGet() {
-    char puerto;
-    int bit;
+void testBitGet(char puerto, int bit) 
+{
+    testfail = 0;
+    testpass = 0;
+    BitClr(puerto, bit);
+    BitSet(puerto, bit);
     int result = BitGet(puerto, bit);
-    if (1 /*check result*/) {
+    if(result == 1)
+    {
+        testpass++;
+        testpassglo++;
+    }
+    else
+    {
+        testfail++;
+        testfailglobal++;
         printf("%%TEST_FAILED%% time=0 testname=testBitGet (tests) message=error message sample\n");
     }
+    printf("TEST PASS BITGET = %d TEST FAIL BITGET= %d", testpass, testfail);
 }
 
 void testBitToggle() {
