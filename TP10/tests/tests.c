@@ -163,15 +163,75 @@ void testBitGet(char puerto, int bit)
     printf("TEST PASS BITGET = %d TEST FAIL BITGET= %d", testpass, testfail);
 }
 
+int testfailglo = 0;
+int testpassglo = 0;
+int ccc;
+
 void testBitToggle() {
-    char puerto;
-    int bit;
-    BitToggle(puerto, bit);
-    if (1 /*check result*/) {
+    int c= BitGet(puerto,bit);
+    if(c==1)
+    {
+        ccc=0;
+    }
+    else
+    {
+        ccc=1;
+    }
+    switch (puerto)
+    {
+        case 'D':
+        case 'd':
+            if (bit == 1 && registro.bits.b1 == ccc)
+            {
+                testpass++;
+                testpassglo++;
+            }
+            if(bit == 10 && registro.bits.b10 == ccc)
+            {
+                testpass++;
+                testpassglo++;
+            }
+            else
+            {
+                testfail++;
+                testfailglo++;
+            }
+            break;
+            
+        case 'a':    
+        case 'A':
+             if (bit == 9 && registro.bits.b9 == ccc)
+            {
+                testpass++;
+                testpassglo++;
+            }
+            else
+            {
+                testfail++;
+                testfailglo++;
+            }
+             break;
+        
+        case 'b':
+        case 'B':
+         if (bit == 4 && registro.bits.b4 == ccc)
+            {
+                testpass++;
+                testpassglo++;
+            }
+            else
+            {
+                testfail++;
+                testfailglo++;
+            }
+         break;
+    }
+    if(testfail != 0)
+    {
         printf("%%TEST_FAILED%% time=0 testname=testBitToggle (tests) message=error message sample\n");
     }
+    printf("TEST PASS BITTOGGLE = %d TEST FAIL BITTOGGLE = %d", testpass,testfail);
 }
-
 void testMaskOn() {
     testfail = 0;
     testpass = 0;
