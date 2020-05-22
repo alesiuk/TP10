@@ -6,7 +6,7 @@
 
 /*
  * File:   tests.c
- * Author: alito
+ * Author: Salta
  *
  * Created on May 21, 2020, 4:24 PM
  */
@@ -160,12 +160,51 @@ void testBitToggle() {
 }
 
 void testMaskOn() {
-    char puerto;
-    int mascara;
-    MaskOn(puerto, mascara);
-    if (1 /*check result*/) {
-        printf("%%TEST_FAILED%% time=0 testname=testMaskOn (tests) message=error message sample\n");
+    char puertoD, puertoA,puertoB;
+    registro.portD.Word==0xAAAA;				//1010 1010 1010 1010
+    int mascara=0x5555;						//0101 0101 0101 0101
+    testfail = 0;
+    testpass = 0;
+    MaskOn(puertoD, mascara); 
+    if((registro.portD.word)==(0xFFFF))
+    {
+	testpass++;
+	testpassglo++;
     }
+    else 
+    {
+	testfail++;
+	testfailglo++;
+    }
+    int mascara=0x55;
+    MaskOn(puertoA,mascara);
+    if((registro.portA.high)==(0xFF))
+    {
+	testpass++;
+	testpassglo++;
+    } 
+    else
+    {
+	testfail++;
+	testfailglo++;	
+    }
+    int mascara=0x55;
+    MaskOn(puertoB,mascara);
+    if((registro.portB.low)=(0xFF))
+    {
+	testpass++;
+	testpastglo++;
+    }
+    else
+    {
+	testfail++;
+	testfailglo++;
+    }
+    if(testfail != 0)
+    {
+        printf("%%TEST_FAILED%% time=0 testname=testBitClr (tests) message=error message sample\n");
+    }
+    printf("TEST PASS BITCLR = %d TEST FAIL BITCLR = %d", testpass,testfail);
 }
 
 void testMaskOff() {
